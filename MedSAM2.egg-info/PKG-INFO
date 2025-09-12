@@ -1,0 +1,186 @@
+Metadata-Version: 2.4
+Name: MedSAM2
+Version: 1.0
+Summary: MedSAM2 was adapted from SAM2 (https://github.com/facebookresearch/sam2) for medical image segmentation.
+Home-page: https://github.com/bowang-lab/MedSAM2
+Author: WangLab
+Author-email: medseg20s@gmail.com
+License: Apache 2.0
+Requires-Python: >=3.10.0
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: torch>=2.5.1
+Requires-Dist: torchvision>=0.20.1
+Requires-Dist: numpy>=2.0.1
+Requires-Dist: tqdm>=4.66.5
+Requires-Dist: hydra-core>=1.3.2
+Requires-Dist: iopath>=0.1.10
+Requires-Dist: pillow>=10.4.0
+Requires-Dist: SimpleITK>=2.4.0
+Provides-Extra: notebooks
+Requires-Dist: matplotlib>=3.9.1; extra == "notebooks"
+Requires-Dist: jupyter>=1.0.0; extra == "notebooks"
+Requires-Dist: opencv-python>=4.10.0; extra == "notebooks"
+Requires-Dist: eva-decord>=0.6.1; extra == "notebooks"
+Provides-Extra: interactive-demo
+Requires-Dist: Flask>=3.0.3; extra == "interactive-demo"
+Requires-Dist: Flask-Cors>=5.0.0; extra == "interactive-demo"
+Requires-Dist: av>=13.0.0; extra == "interactive-demo"
+Requires-Dist: dataclasses-json>=0.6.7; extra == "interactive-demo"
+Requires-Dist: eva-decord>=0.6.1; extra == "interactive-demo"
+Requires-Dist: gunicorn>=23.0.0; extra == "interactive-demo"
+Requires-Dist: imagesize>=1.4.1; extra == "interactive-demo"
+Requires-Dist: pycocotools>=2.0.8; extra == "interactive-demo"
+Requires-Dist: strawberry-graphql>=0.239.2; extra == "interactive-demo"
+Provides-Extra: dev
+Requires-Dist: matplotlib>=3.9.1; extra == "dev"
+Requires-Dist: jupyter>=1.0.0; extra == "dev"
+Requires-Dist: black==24.2.0; extra == "dev"
+Requires-Dist: usort==1.0.2; extra == "dev"
+Requires-Dist: ufmt==2.0.0b2; extra == "dev"
+Requires-Dist: fvcore>=0.1.5.post20221221; extra == "dev"
+Requires-Dist: pandas>=2.2.3; extra == "dev"
+Requires-Dist: scikit-image>=0.24.0; extra == "dev"
+Requires-Dist: tensorboard>=2.17.0; extra == "dev"
+Requires-Dist: pycocotools>=2.0.8; extra == "dev"
+Requires-Dist: tensordict>=0.5.0; extra == "dev"
+Requires-Dist: opencv-python>=4.10.0; extra == "dev"
+Requires-Dist: submitit>=1.5.1; extra == "dev"
+Dynamic: author
+Dynamic: author-email
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: license
+Dynamic: license-file
+Dynamic: provides-extra
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
+# MedSAM2
+Segment Anything in 3D Medical Images and Videos
+
+<div align="center">
+ <table align="center">
+   <tr>
+     <td><a href="https://arxiv.org/abs/2504.03600" target="_blank"><img src="https://img.shields.io/badge/arXiv-Paper-FF6B6B?style=for-the-badge&logo=arxiv&logoColor=white" alt="Paper"></a></td>
+     <td><a href="https://medsam2.github.io/" target="_blank"><img src="https://img.shields.io/badge/Project-Page-4285F4?style=for-the-badge&logoColor=white" alt="Project"></a></td>
+     <td><a href="https://github.com/bowang-lab/MedSAM2" target="_blank"><img src="https://img.shields.io/badge/GitHub-Code-181717?style=for-the-badge&logo=github&logoColor=white" alt="Code"></a></td>
+     <td><a href="https://huggingface.co/wanglab/MedSAM2" target="_blank"><img src="https://img.shields.io/badge/HuggingFace-Model-FFBF00?style=for-the-badge&logo=huggingface&logoColor=white" alt="HuggingFace Model"></a></td>
+   </tr>
+   <tr>
+     <td><a href="https://medsam-datasetlist.github.io/" target="_blank"><img src="https://img.shields.io/badge/Dataset-List-00B89E?style=for-the-badge" alt="Dataset List"></a></td>
+     <td><a href="https://huggingface.co/datasets/wanglab/CT_DeepLesion-MedSAM2" target="_blank"><img src="https://img.shields.io/badge/Dataset-CT__DeepLesion-28A745?style=for-the-badge" alt="CT_DeepLesion-MedSAM2"></a></td>
+     <td><a href="https://huggingface.co/datasets/wanglab/LLD-MMRI-MedSAM2" target="_blank"><img src="https://img.shields.io/badge/Dataset-LLD--MMRI-FF6B6B?style=for-the-badge" alt="LLD-MMRI-MedSAM2"></a></td>
+     <td><a href="https://github.com/bowang-lab/MedSAMSlicer/tree/MedSAM2" target="_blank"><img src="https://img.shields.io/badge/3D_Slicer-Plugin-e2006a?style=for-the-badge" alt="3D Slicer"></a></td>
+   </tr>
+   <tr>
+     <td><a href="https://github.com/bowang-lab/MedSAM2/blob/main/app.py" target="_blank"><img src="https://img.shields.io/badge/Gradio-Demo-F9D371?style=for-the-badge&logo=gradio&logoColor=white" alt="Gradio App"></a></td>
+     <td><a href="https://colab.research.google.com/drive/1MKna9Sg9c78LNcrVyG58cQQmaePZq2k2?usp=sharing" target="_blank"><img src="https://img.shields.io/badge/Colab-CT--Seg--Demo-F9AB00?style=for-the-badge&logo=googlecolab&logoColor=white" alt="CT-Seg-Demo"></a></td>
+     <td><a href="https://colab.research.google.com/drive/16niRHqdDZMCGV7lKuagNq_r_CEHtKY1f?usp=sharing" target="_blank"><img src="https://img.shields.io/badge/Colab-Video--Seg--Demo-F9AB00?style=for-the-badge&logo=googlecolab&logoColor=white" alt="Video-Seg-Demo"></a></td>
+     <td><a href="https://github.com/bowang-lab/MedSAM2?tab=readme-ov-file#bibtex" target="_blank"><img src="https://img.shields.io/badge/Paper-BibTeX-9370DB?style=for-the-badge&logoColor=white" alt="BibTeX"></a></td>
+   </tr>
+ </table>
+</div>
+
+Welcome to join our [mailing list](https://forms.gle/bLxGb5SEpdLCUChQ7) to get updates. We’re also actively looking to collaborate on annotating new large-scale 3D datasets. If you have unlabeled medical images or videos and want to share them with the community, let’s connect!
+
+
+## Installation 
+
+- Create a virtual environment: `conda create -n medsam2 python=3.12 -y` and `conda activate medsam2` 
+- Install [PyTorch](https://pytorch.org/get-started/locally/): `pip3 install torch torchvision` (Linux CUDA 12.4)
+- Download code `git clone https://github.com/bowang-lab/MedSAM2.git && cd MedSAM2` and run `pip install -e ".[dev]"`
+- Download checkpoints: `sh download.sh`
+- Optional: Please install the following dependencies for gradio
+
+```bash
+sudo apt-get update
+sudo apt-get install ffmpeg
+pip install gradio==3.38.0
+pip install numpy==1.26.3 
+pip install ffmpeg-python 
+pip install moviepy
+```
+
+## Download annotated datasets
+
+- [CT_DeepLesion-MedSAM2](https://huggingface.co/datasets/wanglab/CT_DeepLesion-MedSAM2)
+
+
+
+- [LLD-MMRI-MedSAM2](https://huggingface.co/datasets/wanglab/LLD-MMRI-MedSAM2) 
+
+Note: Please also cite the raw [DeepLesion](https://doi.org/10.1117/1.JMI.5.3.036501) and [LLD-MMRI](https://www.sciencedirect.com/science/article/pii/S0893608025001078) dataset paper when using these datasets. 
+
+- [RVENET](https://rvenet.github.io/dataset/): Waiting for authors' approval to release the mask.  
+
+
+## Inference
+
+### 3D medical image segmentation
+
+- [Colab](https://colab.research.google.com/drive/1MKna9Sg9c78LNcrVyG58cQQmaePZq2k2?usp=sharing): [MedSAM2_inference_CT_Lesion_Demo.ipynb](notebooks/MedSAM2_inference_CT_Lesion.ipynb)
+
+- CMD
+
+```bash
+python medsam2_infer_3D_CT.py -i CT_DeepLesion/images -o CT_DeepLesion/segmentation
+```
+
+### Medical video segmentation
+
+- [Colab](https://colab.research.google.com/drive/16niRHqdDZMCGV7lKuagNq_r_CEHtKY1f?usp=sharing): [MedSAM2_Inference_Video_Demo.ipynb](notebooks/MedSAM2_Inference_Video.ipynb)
+
+
+- CMD
+
+```bash
+python medsam2_infer_video.py -i input_video_path -m input_mask_path -o output_video_path 
+```
+
+
+
+
+### Gradio demo
+
+```bash
+python app.py
+```
+
+## Training
+
+Specify dataset path in `sam2/configs/sam2.1_hiera_tiny_finetune512.yaml`
+
+```bash
+sbatch multi_node_train.sh
+```
+
+## Acknowledgements
+
+- We highly appreciate all the challenge organizers and dataset owners for providing the public datasets to the community.
+- We thank Meta AI for making the source code of [SAM2](https://github.com/facebookresearch/sam2) publicly available. Please also cite this paper when using MedSAM2. 
+
+
+## Bibtex
+
+```bash
+@article{MedSAM2,
+    title={MedSAM2: Segment Anything in 3D Medical Images and Videos},
+    author={Ma, Jun and Yang, Zongxin and Kim, Sumin and Chen, Bihui and Baharoon, Mohammed and Fallahpour, Adibvafa and Asakereh, Reza and Lyu, Hongwei and Wang, Bo},
+    journal={arXiv preprint arXiv:2504.03600},
+    year={2025}
+}
+```
+Please also cite SAM2
+```
+@article{ravi2024sam2,
+  title={SAM 2: Segment Anything in Images and Videos},
+  author={Ravi, Nikhila and Gabeur, Valentin and Hu, Yuan-Ting and Hu, Ronghang and Ryali, Chaitanya and Ma, Tengyu and Khedr, Haitham and R{\"a}dle, Roman and Rolland, Chloe and Gustafson, Laura and Mintun, Eric and Pan, Junting and Alwala, Kalyan Vasudev and Carion, Nicolas and Wu, Chao-Yuan and Girshick, Ross and Doll{\'a}r, Piotr and Feichtenhofer, Christoph},
+  journal={arXiv preprint arXiv:2408.00714},
+  url={https://arxiv.org/abs/2408.00714},
+  year={2024}
+}
+```
+
